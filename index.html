@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timi — Web3 Growth &amp; Community Operator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E0C0A;
+    --surface:#1A1714;
+    --surface-2:#221E19;
+    --bone:#F2EDE4;
+    --muted:#948C7C;
+    --hairline:#332E27;
+    --signal:#C4491D;
+    --gold:#B08B4F;
+    --serif:'Fraunces', serif;
+    --sans:'Manrope', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1100px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- TICKER (signature element) ---------- */
+  .ticker-band{
+    background:var(--surface-2);
+    border-bottom:1px solid var(--hairline);
+    overflow:hidden;
+    white-space:nowrap;
+    position:sticky; top:0; z-index:50;
+  }
+  .ticker-track{
+    display:inline-flex;
+    animation:scroll 32s linear infinite;
+    padding:10px 0;
+  }
+  .ticker-track span{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    color:var(--muted);
+    padding:0 26px;
+    border-right:1px solid var(--hairline);
+  }
+  .ticker-track span b{color:var(--signal); font-weight:600;}
+  .ticker-track span.up::before{content:"▲ "; color:var(--gold);}
+  @keyframes scroll{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:22px 0;
+  }
+  .logo{font-family:var(--serif); font-weight:600; font-size:19px; letter-spacing:0.01em;}
+  .logo span{color:var(--signal);}
+  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--muted);}
+  .navlinks a:hover{color:var(--bone);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:80px 0 100px; border-bottom:1px solid var(--hairline);}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; color:var(--gold);
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:22px; display:block;
+  }
+  h1{
+    font-family:var(--serif); font-weight:600; font-style:italic;
+    font-size:clamp(38px, 6vw, 68px);
+    line-height:1.05;
+    max-width:780px;
+    margin-bottom:26px;
+  }
+  h1 em{font-style:normal; color:var(--signal); font-weight:700;}
+  .hero-sub{
+    font-size:17px; color:var(--muted); max-width:560px; margin-bottom:36px;
+  }
+  .cta-row{display:flex; gap:16px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--sans); font-weight:600; font-size:14.5px;
+    padding:13px 26px; border-radius:2px; text-decoration:none;
+    display:inline-block; transition:all .15s ease;
+  }
+  .btn-primary{background:var(--signal); color:var(--bone);}
+  .btn-primary:hover{background:#a83c17;}
+  .btn-ghost{border:1px solid var(--hairline); color:var(--bone);}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* ---------- SECTION HEADER ---------- */
+  .section{padding:80px 0; border-bottom:1px solid var(--hairline);}
+  .section-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:44px; flex-wrap:wrap; gap:12px;}
+  .section-title{font-family:var(--serif); font-size:32px; font-weight:600;}
+  .section-note{font-family:var(--mono); font-size:12px; color:var(--muted); max-width:280px; text-align:right;}
+
+  /* ---------- STATS STRIP ---------- */
+  .stats-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:1px;
+    background:var(--hairline); border:1px solid var(--hairline);
+  }
+  .stat-card{background:var(--ink); padding:28px 22px;}
+  .stat-num{font-family:var(--mono); font-size:30px; color:var(--gold); font-weight:600; margin-bottom:6px;}
+  .stat-label{font-size:13px; color:var(--muted);}
+  .stat-project{font-family:var(--mono); font-size:11px; color:var(--gold); letter-spacing:0.05em; text-transform:uppercase; margin-top:10px;}
+  @media (max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- POW GRID (X posts) ---------- */
+  .pow-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:20px;}
+  .pow-card{
+    background:var(--surface); border:1px solid var(--hairline);
+    padding:22px; min-height:220px; display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .placeholder-tag{
+    font-family:var(--mono); font-size:11px; color:var(--signal);
+    border:1px dashed var(--signal); display:inline-block; padding:4px 8px; margin-bottom:14px; opacity:0.75;
+  }
+  .pow-card p{color:var(--muted); font-size:14px;}
+  .pow-meta{font-family:var(--mono); font-size:12px; color:var(--gold); margin-top:16px;}
+  @media (max-width:800px){.pow-grid{grid-template-columns:1fr;}}
+
+  /* ---------- REVIEWS ---------- */
+  .review-row{display:flex; flex-direction:column; gap:1px; background:var(--hairline); border:1px solid var(--hairline);}
+  .review-card{background:var(--ink); padding:26px 28px; display:flex; gap:24px; align-items:flex-start;}
+  .review-shot{
+    width:130px; height:80px; flex-shrink:0; background:var(--surface-2);
+    border:1px dashed var(--hairline); display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:10.5px; color:var(--muted); text-align:center; padding:6px;
+  }
+  .review-text{font-style:italic; color:var(--bone); font-size:15px; margin-bottom:8px;}
+  .review-src{font-family:var(--mono); font-size:12px; color:var(--muted);}
+
+  /* ---------- GRAPHICS GALLERY ---------- */
+  .gallery-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;}
+  .gallery-item{
+    aspect-ratio:1; background:var(--surface); border:1px dashed var(--hairline);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-family:var(--mono); font-size:11px; color:var(--muted); padding:14px;
+  }
+  .gallery-figure{
+    background:var(--surface); border:1px solid var(--hairline); overflow:hidden;
+  }
+  .gallery-figure img{
+    width:100%; aspect-ratio:1; object-fit:cover; display:block;
+  }
+  .gallery-cap{
+    padding:10px 12px; font-family:var(--mono); font-size:10.5px; color:var(--muted);
+    border-top:1px solid var(--hairline);
+  }
+  .gallery-cap b{color:var(--gold); font-weight:600; display:block; margin-bottom:2px; text-transform:uppercase; letter-spacing:0.04em;}
+  @media (max-width:800px){.gallery-grid{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- FOLDER TILES ---------- */
+  .folder-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;}
+  .folder-card{
+    background:var(--surface); border:1px solid var(--hairline);
+    cursor:pointer; overflow:hidden; text-align:left;
+    transition:border-color .15s ease;
+  }
+  .folder-card:hover{border-color:var(--gold);}
+  .folder-cover{
+    aspect-ratio:16/10; position:relative; background:var(--surface-2);
+    display:flex; align-items:center; justify-content:center; overflow:hidden;
+  }
+  .folder-cover img{width:100%; height:100%; object-fit:cover; display:block;}
+  .folder-cover.empty{
+    border-bottom:1px dashed var(--hairline);
+    font-family:var(--mono); font-size:11px; color:var(--muted); padding:14px; text-align:center;
+  }
+  .folder-count{
+    position:absolute; top:10px; right:10px; background:rgba(14,12,10,0.75);
+    color:var(--bone); font-family:var(--mono); font-size:11px; padding:3px 9px;
+    border:1px solid var(--hairline); letter-spacing:0.03em;
+  }
+  .folder-info{padding:16px 18px;}
+  .folder-name{font-family:var(--serif); font-size:18px; font-weight:600; margin-bottom:4px;}
+  .folder-sub{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.03em;}
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    display:none; position:fixed; inset:0; z-index:200;
+    background:rgba(14,12,10,0.92); padding:40px 24px; overflow-y:auto;
+  }
+  .lightbox.active{display:block;}
+  .lightbox-inner{max-width:1000px; margin:0 auto;}
+  .lightbox-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:28px; flex-wrap:wrap; gap:12px;
+  }
+  .lightbox-title{font-family:var(--serif); font-size:26px; font-weight:600;}
+  .lightbox-close{
+    font-family:var(--mono); font-size:13px; color:var(--bone); background:transparent;
+    border:1px solid var(--hairline); padding:9px 16px; cursor:pointer;
+  }
+  .lightbox-close:hover{border-color:var(--signal); color:var(--signal);}
+  .lightbox-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;}
+  .lightbox-grid .gallery-figure img{cursor:zoom-in;}
+  .lightbox-empty{
+    font-family:var(--mono); font-size:13px; color:var(--muted);
+    border:1px dashed var(--hairline); padding:40px 20px; text-align:center;
+  }
+  @media (max-width:900px){.folder-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:800px){.lightbox-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.folder-grid{grid-template-columns:1fr;}}
+
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{padding:70px 0 50px;}
+  .footer-title{font-family:var(--serif); font-size:28px; font-style:italic; margin-bottom:22px; max-width:520px;}
+  .footer-links{display:flex; gap:28px; font-family:var(--mono); font-size:13px; color:var(--muted); flex-wrap:wrap;}
+  .footer-links a:hover{color:var(--gold);}
+  .fine{margin-top:50px; font-size:12px; color:var(--muted); font-family:var(--mono);}
+
+  @media (max-width:640px){
+    nav .navlinks{display:none;}
+    .section-head{flex-direction:column; align-items:flex-start;}
+    .section-note{text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="ticker-band">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+
+  <div class="wrap">
+    <nav>
+      <div class="logo">TIMI<span>.</span></div>
+      <div class="navlinks">
+        <a href="#pow">Proof of Work</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#graphics">Graphics</a>
+        <a href="#stats">Stats</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Lagos · Web3 Growth &amp; BD Operator</span>
+      <h1>I take Web3 communities from <em>quiet</em> to <em>unmissable</em>.</h1>
+      <p class="hero-sub">
+        Community manager, growth operator, and BD closer working with early-stage crypto projects across multiple chains and niches.
+      </p>
+      <div class="cta-row">
+        <a href="#pow" class="btn btn-primary">See the work</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="stats">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-title">The numbers</div>
+        <div class="section-note">Pulled straight from your CV — swap in whichever metrics you want to lead with.</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-num">36 → 200</div>
+          <div class="stat-label">Telegram members in 5 days</div>
+          <div class="stat-project">Growstreams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">25 → 140</div>
+          <div class="stat-label">X followers in 3 days</div>
+          <div class="stat-project">Growstreams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">200 → 500+</div>
+          <div class="stat-label">Discord members, 60 days</div>
+          <div class="stat-project">Aqualoan</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">25 → 50</div>
+          <div class="stat-label">X followers in 2 days</div>
+          <div class="stat-project">Campcode</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="pow">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-title">Proof of work — from X</div>
+        <div class="section-note">Written content — educational, informative, and community growth-centred.</div>
+      </div>
+      <div class="pow-grid">
+        <div class="pow-card">
+          <div>
+            <span class="placeholder-tag">Wizz HQ bounty entry</span>
+            <p>Tensor One — breaks down how the platform lets users spin up autonomous AI agents on decentralized GPU infrastructure and earn from them, written to make a technical mechanism land for a non-technical reader.</p>
+          </div>
+          <div class="pow-meta"><a href="https://x.com/Timi__4_reall/status/1965499337120862538" target="_blank" style="color:inherit;">View thread →</a></div>
+        </div>
+        <div class="pow-card">
+          <div>
+            <span class="placeholder-tag">Wizz HQ bounty entry</span>
+            <p>@re restaking &amp; reinsurance — a two-part explainer unpacking how the protocol reworks restaking and reinsurance mechanics, covering reUSDe, points, and early-contributor incentives in plain terms.</p>
+          </div>
+          <div class="pow-meta">
+            <a href="https://x.com/Timi__4_reall/status/1964694446697820512" target="_blank" style="color:inherit;">Part 1 →</a>
+            &nbsp;·&nbsp;
+            <a href="https://x.com/Timi__4_reall/status/1964707155174731832" target="_blank" style="color:inherit;">Part 2 →</a>
+          </div>
+        </div>
+        <div class="pow-card">
+          <div>
+            <span class="placeholder-tag">User onboarding / product testing</span>
+            <p>Campcode — a hands-on demo of the Telegram AI co-pilot that deploys smart contracts and tokens from plain-English chat, walking through a live build with zero code.</p>
+          </div>
+          <div class="pow-meta"><a href="https://x.com/Timi__4_reall/status/1978118718468026728" target="_blank" style="color:inherit;">View thread →</a></div>
+        </div>
+      </div>
+
+      <div style="margin-top:56px;">
+        <div class="section-head" style="margin-bottom:24px;">
+          <div class="section-title" style="font-size:22px;">Projects I've worked with</div>
+          <div class="section-note">Roles across community, moderation, ambassador, and BD work — what each one delivered.</div>
+        </div>
+        <div class="review-row">
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">SMARTS</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Community Lead · May 2025 – Jul 2025</div>
+              <div class="review-src">Led engagement strategy, structured the internal mod team, and became the main link between community and core team.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">GROWSTREAMS</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Community Growth Strategist · Jul 2025</div>
+              <div class="review-src">Grew the community from 36 to 200 members in five days and X followers from 25 to 140 in three days.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">CAMPCODE</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Community Growth · Oct 13–17, 2025</div>
+              <div class="review-src">Grew X followers from 25 to 50 in two days, running content across X and Telegram.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Aqualoan</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Graphic Designer / Moderator / Lead Ambassador · Oct–Dec 2024</div>
+              <div class="review-src">Designed social and event visuals, ran AMAs and quizzes, and drove ambassador activations across alpha spaces.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Wizz HQ</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Business Development Intern · 2025</div>
+              <div class="review-src">Researched partnership and collab targets, ran alpha hunting and space outreach, logged weekly strategy activity.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Oasis on Solana</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Ambassador · Feb 2025</div>
+              <div class="review-src">Shared project updates, ran engagement drives and AMAs, and pushed education within Web3 groups.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Fakepepe / SHEK</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Community Moderator · Jun 2024</div>
+              <div class="review-src">Controlled spam, ran shill and raid campaigns, and hosted reward-based community events.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Cult of Peter</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Community Moderator · Jan–Mar 2024</div>
+              <div class="review-src">Handled user support, resolved disputes, and ran onboarding for new members.</div>
+            </div>
+          </div>
+          <div class="review-card">
+            <div class="review-shot" style="width:110px;">Multi-project</div>
+            <div>
+              <div class="review-text" style="font-style:normal;">Ambassador · Mandalachain, Suede AI, Ova Finance, Gambit, ZKAGI, Aida, SoccerN · 2025</div>
+              <div class="review-src">Ran awareness efforts across seven projects — shill content, reposts, and event/collab representation.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-title">What people say</div>
+      </div>
+      <div class="review-row">
+        <div class="review-card">
+          <div class="review-shot" style="width:130px; height:80px; padding:0; border:1px solid var(--hairline); overflow:hidden;"><img src="assets/review-campcodegen.png" alt="Testimonial from Satyam, Camp CodeGen" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+          <div>
+            <div class="review-text">"Good content mate — thanks for the kind support, keep supporting."</div>
+            <div class="review-src">— Satyam, Camp CodeGen, Telegram DM</div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-shot" style="width:130px; height:80px; padding:0; border:1px solid var(--hairline); overflow:hidden;"><img src="assets/review-oasis.png" alt="Testimonial on Oasis roadmap breakdown" style="width:100%; height:100%; object-fit:cover; display:block;"></div>
+          <div>
+            <div class="review-text">"This looks great, the spaces are a huge growth catalyst."</div>
+            <div class="review-src">— Oasis on Solana, Telegram DM (on phase-one roadmap breakdown)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="graphics">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-title">Graphics &amp; design work</div>
+        <div class="section-note">Project visuals, infographics and images created for clients and content.</div>
+      </div>
+      <div class="folder-grid">
+        <div class="folder-card" onclick="openFolder('aqualoan')">
+          <div class="folder-cover">
+            <img src="assets/aqualoan-01.jpg" alt="Aqualoan graphics folder cover">
+            <div class="folder-count">13 files</div>
+          </div>
+          <div class="folder-info">
+            <div class="folder-name">Aqualoan</div>
+            <div class="folder-sub">Graphic Designer · Oct–Dec 2024</div>
+          </div>
+        </div>
+        <div class="folder-card" onclick="openFolder('re')">
+          <div class="folder-cover">
+            <img src="assets/re-02.jfif" alt="@re infographics folder cover">
+            <div class="folder-count">9 files</div>
+          </div>
+          <div class="folder-info">
+            <div class="folder-name">@re</div>
+            <div class="folder-sub">Restaking &amp; reinsurance</div>
+          </div>
+        </div>
+        <div class="folder-card" onclick="openFolder('tensorone')">
+          <div class="folder-cover">
+            <img src="assets/tensor-01.jfif" alt="Tensor One infographics folder cover">
+            <div class="folder-count">9 files</div>
+          </div>
+          <div class="folder-info">
+            <div class="folder-name">Tensor One</div>
+            <div class="folder-sub">AI agents · Wizz HQ bounty</div>
+          </div>
+        </div>
+        <div class="folder-card" onclick="openFolder('pokepay')">
+          <div class="folder-cover">
+            <img src="assets/pokepay-cover.jpg" alt="PokePay motion graphics folder cover">
+            <div class="folder-count">1 file</div>
+          </div>
+          <div class="folder-info">
+            <div class="folder-name">PokePay</div>
+            <div class="folder-sub">Motion graphics</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <div class="lightbox-head">
+        <div class="lightbox-title" id="lightboxTitle">Folder</div>
+        <button class="lightbox-close" onclick="closeFolder()">Close ✕</button>
+      </div>
+      <div class="lightbox-grid" id="lightboxGrid"></div>
+    </div>
+  </div>
+
+  <footer id="contact">
+    <div class="wrap">
+      <div class="footer-title">Open to CM, growth, and BD roles across Web3 — let's talk.</div>
+      <div class="footer-links">
+        <a href="https://x.com/timi__4_reall" target="_blank">X — @timi__4_reall</a>
+        <a href="mailto:timi.4.realll@gmail.com">Email</a>
+        <a href="https://t.me/timi_4_reall" target="_blank">Telegram</a>
+        <a href="assets/resume.pdf" download>Download CV — PDF</a>
+      </div>
+      <div class="fine">Built and maintained by Timi · Lagos, Nigeria</div>
+    </div>
+  </footer>
+
+<script>
+  // Ticker content — swap/add real stats here
+  const tickerItems = [
+    { text: "TELEGRAM GROWTH", value: "+455%", up: true },
+    { text: "X FOLLOWERS", value: "+460%", up: true },
+    { text: "DISCORD (60D)", value: "200→500+", up: true },
+    { text: "PROJECTS SHIPPED", value: "GOALEE · POKEPAY", up: false },
+    { text: "ROLE", value: "CM · GROWTH · BD", up: false },
+    { text: "STATUS", value: "OPEN TO WORK", up: true },
+  ];
+  const track = document.getElementById('tickerTrack');
+  function buildTicker(){
+    let html = '';
+    for(let i=0;i<2;i++){ // duplicate for seamless loop
+      tickerItems.forEach(item=>{
+        html += `<span class="${item.up ? 'up' : ''}">${item.text} <b>${item.value}</b></span>`;
+      });
+    }
+    track.innerHTML = html;
+  }
+  buildTicker();
+
+  // Graphics folders — add image paths/captions here as you get more assets
+  const folders = {
+    aqualoan: {
+      title: "Aqualoan — Graphic Designer, Oct–Dec 2024",
+      images: [
+        { src: "assets/aqualoan-01.jpg", cap: "Welcome / protocol intro" },
+        { src: "assets/aqualoan-02.jpg", cap: "Trade live on PancakeSwap" },
+        { src: "assets/aqualoan-03.jpg", cap: "Unlock your assets" },
+        { src: "assets/aqualoan-04.jpg", cap: "Elevate your financial journey" },
+        { src: "assets/aqualoan-05.jpg", cap: "× BlockSec partnership" },
+        { src: "assets/aqualoan-06.jpg", cap: "Platform positioning graphic" },
+        { src: "assets/aqualoan-07.jpg", cap: "Empower your crypto journey" },
+        { src: "assets/aqualoan-08.jpg", cap: "Feature breakdown" },
+        { src: "assets/aqualoan-09.jpg", cap: "Think DeFi loans" },
+        { src: "assets/aqualoan-10.jpg", cap: "Daily tasks announcement" },
+        { src: "assets/aqualoan-11.jpg", cap: "App preview — launching soon" },
+        { src: "assets/aqualoan-12.jpg", cap: "Feature breakdown (variant)" },
+        { src: "assets/aqualoan-13.jpg", cap: "Non-custodial liquidity market" },
+      ]
+    },
+    re: {
+      title: "@re — Restaking & Reinsurance",
+      images: [
+        { src: "assets/re-01.jfif", cap: "Most people in DeFi know staking and yield farming" },
+        { src: "assets/re-02.jfif", cap: "What is reinsurance?" },
+        { src: "assets/re-03.jfif", cap: "Why bring reinsurance on-chain?" },
+        { src: "assets/re-04.jfif", cap: "How reinsurance works" },
+        { src: "assets/re-05.jfif", cap: "Restaking meets reinsurance, normally" },
+        { src: "assets/re-06.jfif", cap: "Restaking + reinsurance flow" },
+        { src: "assets/re-07.jfif", cap: "reUSD & reUSDe explained" },
+        { src: "assets/re-08.jfif", cap: "re points — earned by depositing stablecoins" },
+        { src: "assets/re-09.jfif", cap: "Takeaway — safer finance, more efficient capital" },
+      ]
+    },
+    tensorone: {
+      title: "Tensor One — AI Agents",
+      images: [
+        { src: "assets/tensor-01.jfif", cap: "What if you could build your own AI agent?" },
+        { src: "assets/tensor-02.jfif", cap: "What is TensorOne?" },
+        { src: "assets/tensor-03.jfif", cap: "Key idea" },
+        { src: "assets/tensor-04.jfif", cap: "No-code agent builder" },
+        { src: "assets/tensor-05.jfif", cap: "How to get involved" },
+        { src: "assets/tensor-06.jfif", cap: "Agents run on MCP server" },
+        { src: "assets/tensor-07.jfif", cap: "Monetization layer" },
+        { src: "assets/tensor-08.jfif", cap: "Use cases today" },
+        { src: "assets/tensor-09.jfif", cap: "Why it matters" },
+      ]
+    },
+    pokepay: {
+      title: "PokePay — Motion Graphics",
+      videos: [
+        { src: "assets/pokepay.mp4", cap: "PokePay motion graphics reel" }
+      ]
+    }
+  };
+
+  function openFolder(key){
+    const folder = folders[key];
+    if(!folder) return;
+    document.getElementById('lightboxTitle').textContent = folder.title;
+    const grid = document.getElementById('lightboxGrid');
+    const items = [];
+    if(folder.images) items.push(...folder.images.map(img =>
+      `<figure class="gallery-figure"><img src="${img.src}" alt="${img.cap}"><figcaption class="gallery-cap">${img.cap}</figcaption></figure>`
+    ));
+    if(folder.videos) items.push(...folder.videos.map(v =>
+      `<figure class="gallery-figure"><video src="${v.src}" controls style="width:100%; aspect-ratio:1; object-fit:cover; display:block; background:#000;"></video><figcaption class="gallery-cap">${v.cap}</figcaption></figure>`
+    ));
+    grid.innerHTML = items.length
+      ? items.join('')
+      : '<div class="lightbox-empty">No graphics added for this project yet — drop them into the assets folder and list them in the folders object in the script.</div>';
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFolder(){
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if(e.target.id === 'lightbox') closeFolder();
+  });
+</script>
+
+</body>
+</html>
